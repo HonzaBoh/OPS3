@@ -1,18 +1,18 @@
 #!/bin/bash
 
 MAIN_USER=$(whoami)
-EXPECTED_GROUPS=("grimms" "authors")
-EXPECTED_USERS=("jacob" "wilhelm" "tolkien")
+EXPECTED_GROUPS=("modern" "authors")
+EXPECTED_USERS=("lovecraft" "king" "poe")
 DIRECTORIES=(
-    "/books drwxr-x--- $MAIN_USER authors"
-    "/books/fairyTales drwxrwxr-x $MAIN_USER grimms"
-    "/books/fantasy drwxr-xr-x tolkien authors"
+    "/novels drwxr-x--- $MAIN_USER authors"
+    "/novels/horror drwxrwxr-x $MAIN_USER modern"
+    "/novels/classic drwxr-xr-x poe authors"
 )
 FILES=(
-    "/books/news -rwxrwxr-x $MAIN_USER authors"
-    "/books/fairyTales/rapunzel -rwxrwxr-x wilhelm grimms"
-    "/books/fantasy/lotr -rwxr-xr-x tolkien authors"
-    "/books/fantasy/unfinished -rwx------ tolkien"
+    "/novels/news -rwxrwxr-x $MAIN_USER authors"
+    "/novels/horror/shining -rwxrwxr-x king modern"
+    "/novels/classic/raven -rwxr-xr-x poe authors"
+    "/novels/classic/script -rwx------ poe"
 )
 
 check_groups() {
