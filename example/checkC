@@ -5,7 +5,7 @@ EXPECTED_GROUPS=("medical" "personnel")
 EXPECTED_USERS=("nurse" "doctor" "secretary")
 DIRECTORIES=(
     "/hospital drwxr-x--- $MAIN_USER personnel"
-    "/hospital/patients drwxrxr-x $MAIN_USER medical"
+    "/hospital/patients drwxr-xr-x $MAIN_USER medical"
     "/hospital/office drwxr-xr-x secretary personnel"
 )
 FILES=(
