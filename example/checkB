@@ -1,18 +1,18 @@
 #!/bin/bash
 
 MAIN_USER=$(whoami)
-EXPECTED_GROUPS=("modern" "authors")
-EXPECTED_USERS=("lovecraft" "king" "poe")
+EXPECTED_GROUPS=("grimms" "authors")
+EXPECTED_USERS=("jacob" "wilhelm" "tolkien")
 DIRECTORIES=(
-    "/novels drwxr-x--- $MAIN_USER authors"
-    "/novels/horror drwxrwxr-x $MAIN_USER modern"
-    "/novels/classic drwxr-xr-x poe authors"
+    "/books drwxr-x--- $MAIN_USER authors"
+    "/books/fairyTales drwxrwxr-x $MAIN_USER grimms"
+    "/books/fantasy drwxr-xr-x tolkien authors"
 )
 FILES=(
-    "/novels/news -rwxrwxr-x $MAIN_USER authors"
-    "/novels/horror/shining -rwxrwxr-x king modern"
-    "/novels/classic/raven -rwxr-xr-x poe authors"
-    "/novels/classic/script -rwx------ poe"
+    "/books/interactive.exe -rwxrwxr-x $MAIN_USER authors"
+    "/books/fairyTales/rapunzel -rw-rw-r-- wilhelm grimms"
+    "/books/fantasy/lotr -rw-r----- tolkien authors"
+    "/books/fantasy/unfinished -rw------- tolkien"
 )
 
 check_groups() {
@@ -79,7 +79,6 @@ check_files() {
     done
 }
 
-# Run checks
 echo "Skupiny..."
 check_groups
 echo
