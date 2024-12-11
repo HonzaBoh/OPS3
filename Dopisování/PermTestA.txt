@@ -1,0 +1,24 @@
+Vytvorit uzivatele: lovecraft, king, poe (poe ma home)
+
+Vytvorit skupiny: modern (lovecraft, king), authors (lovecraft, king, poe)
+
+Cesty nize jsou absolutni.
+
+
+Adresare:
+
+/novels (Vlastnik: vas ucet, Skupina: authors): vlastnik muze vse, skupina otevrirat a cist, zbytek nic
+
+/novels/horror (Vlastnik: vas ucet, Skupina: modern): vlastnik muse vse, skupina muze vse, zbytek cist a otevirat
+
+/novels/classic (Vlastnik: poe, Skupina: authors): vlastnik muze vse, skupina pouze cist a otevirat, zbytek pouze cist a otevirat
+
+Soubory:
+
+/novels/interactive.exe (Vlastnik: vas ucet, Skupina: authors): vlastnik muze vse, skupina muze vse, zbytek cist a spoustet
+
+/novels/horror/shining (Vlastnik: king, Skupina: modern): vlastnik muze cist a upravovat, skupina cist a upravovat, zbytek cist
+
+/novels/classic/raven (Vlastnik: poe, Skupina: authors): vlastnik muze cist a upravovat, skupina cist, zbytek nic
+
+/novels/classic/script (Vlastnik: poe, Skupina: nezalezi): upravovat a cist muze pouze vlastnik, nikdo vic
