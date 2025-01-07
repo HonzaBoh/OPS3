@@ -27,25 +27,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message']) && isset($
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message Board</title>
+    <title>Messages</title>
 </head>
 <body>
     <?php if (!isset($_COOKIE['username'])): ?>
-        <h2>Enter your name</h2>
+        <h2>Zadejte svůj nick</h2>
         <form method="post">
-            <label for="name">Name:</label>
+            <label for="name">Nick:</label>
             <input type="text" id="name" name="name" required>
-            <button type="submit">Set Name</button>
+            <button type="submit">Set nickname</button>
         </form>
     <?php else: ?>
-        <h2>Welcome, <?php echo htmlspecialchars($_COOKIE['username']); ?>!</h2>
+        <h2>Zprávy budete zadávat jako: <?php echo htmlspecialchars($_COOKIE['username']); ?>.</h2>
         <form method="post">
-            <label for="message">Enter your message:</label>
+            <label for="message">Zadejte zprávu:</label>
             <input type="text" id="message" name="message" required>
             <button type="submit">Submit</button>
         </form>
 
-        <h3>Messages</h3>
+        <h3>Zadané zprávy</h3>
         <div>
             <?php
             $file = 'messages.txt';
