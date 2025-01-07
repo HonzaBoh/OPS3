@@ -1,0 +1,47 @@
+#!/bin/bash
+
+check_success() {
+    if [ $? -eq 0 ]; then
+        echo "[SUCCESS] $1"
+    else
+        echo "[ERROR] $1"
+        exit 1
+    fi
+}
+
+echo "Stopping Apache2 service..."
+sudo service apache2 stop
+check_success "Apache2 service stopped."
+
+echo "Removing Apache2 and its utilities..."
+sudo apt remove --purge -y apache2 apache2-utils apache2-bin apache2.2-common
+check_success "Apache2 and its utilities removed."
+
+echo "Removing Apache2 configuration files..."
+sudo rm -rf /etc/apache2
+check_success "Configuration files removed."
+
+echo "Removing default web pages from /var/www/html..."
+sudo rm -rf /var/www/html/*
+check_success "Default web pages removed."
+
+echo "Recreating /var/www/html directory..."
+sudo mkdir -p /var/www/html
+sudo chown www-data:www-data /var/www/html
+sudo chmod 755 /var/www/html
+check_success "/var/www/html directory recreated."
+
+echo "Cleaning up unused dependencies..."
+sudo apt autoremove -y
+check_success "Unused dependencies removed."
+
+echo "Removing Apache2 logs from /var/log/apache2..."
+sudo rm -rf /var/log/apache2
+check_success "Logs removed."
+
+echo "Verifying Apache2 removal..."
+if ! command -v apache2 > /dev/null; then
+    echo "[SUCCESS] Apache2 has been completely removed."
+else
+    echo "[ERROR] Apache2 is still installed. Please check manually."
+fi
