@@ -27,7 +27,7 @@ check_success "Default web pages removed."
 
 echo "Recreating /var/www/html directory..."
 sudo mkdir -p /var/www/html
-sudo chown www-data:www-data /var/www/html
+sudo chown root:root /var/www/html
 sudo chmod 755 /var/www/html
 check_success "/var/www/html directory recreated."
 
