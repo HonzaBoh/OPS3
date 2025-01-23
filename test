@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Function to display usage
+usage() {
+    echo "Usage: $0 [cz|us]"
+    echo "  cz - Switch to Czech QWERTZ layout"
+    echo "  us - Switch to English (US) layout"
+    exit 1
+}
+
+# Check if the user provided an argument
+if [ $# -ne 1 ]; then
+    usage
+fi
+
+# Switch keyboard layout based on the argument
+case $1 in
+    cz)
+        setxkbmap cz
+        echo "Switched to Czech (QWERTZ) layout"
+        ;;
+    us)
+        setxkbmap us
+        echo "Switched to English (US) layout"
+        ;;
+    *)
+        usage
+        ;;
+esac
