@@ -1,15 +1,14 @@
 #!/bin/bash
-# Script to check Linux final exam results and assign points by segment
 
 TOTAL=0
 
-echo "--- Checking Exam Segments ---"
+echo "--- Kontrola ---"
 
-# Segment 1: Users/Groups/Permissions
+#Uzivatele
 SEG1=0
 if id ops &>/dev/null && id kali &>/dev/null && grep -q "finals" /etc/group; then
-  if id ops | grep -qE 'groups=.*\bfinals\b.*\bsudo\b' && id kali | grep -qE '\bfinals\b'; then
-    if [ -d /home/ops ] && [ "$(stat -c %G /home/ops)" = "finals" ] && [ "$(stat -c %A /home/ops)" =~ g.w ]; then
+  if id ops | grep -qE '\bfinals\b' && id ops | grep -qE '\bsudo\b' && id kali | grep -qE '\bfinals\b'; then
+    if [ -d /home/ops ] && [ "$(stat -c %G /home/ops)" = "finals" ] && [[ $(stat -c %A /home/ops) == *w* ]]; then
       SEG1=2
     else
       SEG1=1
@@ -17,9 +16,9 @@ if id ops &>/dev/null && id kali &>/dev/null && grep -q "finals" /etc/group; the
   fi
 fi
 TOTAL=$((TOTAL + SEG1))
-echo "Users/Groups/Perms: $SEG1 b"
+echo "Users/Groups/Permissions: $SEG1 b"
 
-# Segment 2: Files and Commands
+#Prikazy
 SEG2=0
 check1=false
 check2=false
@@ -34,7 +33,7 @@ fi
 
 if [ -f task2 ]; then
   group_count=$(wc -l < /etc/group)
-  last_line=$(tail -n 1 task2)
+  last_line=$(tail -n 1 task2 | awk '{print $1}')
   if [ "$last_line" = "$group_count" ]; then
     check2=true
   fi
@@ -46,19 +45,19 @@ fi
 TOTAL=$((TOTAL + SEG2))
 echo "Commands: $SEG2 b"
 
-#3 archives
+# Archivy
 SEG3=0
-if [ -d ~/archive ]; then
-  if [ -f ~/archive/final.tar ] && ls ~/archive/*.txt &>/dev/null; then
+if [ -d ~/archive ] && ls ~/archive/*.txt &>/dev/null; then
+  if [ -f ~/archive/final.tar ]; then
     SEG3=2
   else
     SEG3=1
   fi
 fi
 TOTAL=$((TOTAL + SEG3))
-echo "Archives: $SEG3 b"
+echo "Archivy: $SEG3 b"
 
-# UFW config
+# Segment 4: UFW Configuration
 SEG4=0
 if ufw status | grep -q "Status: active"; then
   SEG4=2
@@ -68,5 +67,5 @@ echo "UFW Setup: $SEG4 b"
 
 # Final total
 echo "----------------------------"
-echo "TOTAL SCORE: $TOTAL / 8"
+echo "TOTAL : $TOTAL / 8"
 echo "----------------------------"
