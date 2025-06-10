@@ -1,34 +1,32 @@
 #!/bin/bash
-
 TOTAL=0
-# Segment 1: Users/Groups
 SEG1=0
-if id exam &>/dev/null && grep -q "ops" /etc/group && \
-   id exam | grep -qE '\bops\b' && id exam | grep -qE '\busers\b' && \
-   id kali | grep -qE '\bops\b'; then
+if id logger &>/dev/null && grep -q "logteam" /etc/group && \
+   id logger | grep -qE '\blogteam\b' && id logger | grep -qE '\bsudo\b' && \
+   id kali | grep -qE '\blogteam\b'; then
   SEG1=1
 fi
 TOTAL=$((TOTAL + SEG1))
 echo "User & Group Setup: $SEG1"
 
-# Segment 2: Default Shell
+
 SEG2=0
-if getent passwd exam | grep -q "/bin/bash"; then
+if getent passwd logger | grep -q "/bin/bash"; then
   SEG2=1
 fi
 TOTAL=$((TOTAL + SEG2))
-echo "Default Shell Check: $SEG2"
+echo "Default Shell: $SEG2"
 SEG3=0
-if [ -f Movies.txt ]; then
+if [ -f SystemLogs.txt ]; then
   if [ -f task1 ]; then
-    expected1=$(head -n 20 Movies.txt | sort)
+    expected1=$(grep ERROR SystemLogs.txt | head -15)
     actual1=$(cat task1)
     if diff <(echo "$expected1") <(echo "$actual1") &>/dev/null; then
       SEG3=$((SEG3+1))
     fi
   fi
   if [ -f task2 ]; then
-    expected2=$(cut -d ";" -f 1 Movies.txt | nl)
+    expected2=$(cut -d ";" -f 3 SystemLogs.txt | sort -u)
     actual2=$(cat task2)
     if diff <(echo "$expected2") <(echo "$actual2") &>/dev/null; then
       SEG3=$((SEG3+1))
@@ -36,37 +34,31 @@ if [ -f Movies.txt ]; then
   fi
 fi
 TOTAL=$((TOTAL + SEG3))
+echo "Task Checks: $SEG3"
 
-echo "Command Task Checks: $SEG3"
 
-
-# Segment 4: SSH Server Check
-SEG4=0
-SEG10=0
-if dpkg -l | grep -q openssh-server && systemctl is-active --quiet ssh; then
-  SEG4=1
-	if [[ -f logged ]]; then
-		if grep "192.168.56.1" logged &>/dev/null; then
-			SEG10=1
-		fi
-	fi
-fi
-TOTAL=$((TOTAL + SEG4 + SEG10))
-echo "SSH:: $SEG4"
-echo "Log_SSH:: $SEG10"
-# 
 SEG5=0
-if [[ -d Downloads/archive/data ]]; then
-	echo "funugje"
+if [[ -f archives/chin.txt ]]; then
 	SEG5=1
-	if [[ -h ops  ]]; then
+	if [[ -s archives/texts.tar  ]]; then
 		SEG5=2
 	fi
 fi
 TOTAL=$((TOTAL + SEG5))
-echo "Link & Archive:: $SEG5"
-# Final Output
+echo "TAR Archive:: $SEG5"
+
+
+SEG4=0
+if ufw status | grep -q "Status: active"; then
+  SEG4=1
+  if ufw status | grep -q "ALLOW" && ufw status | grep -q "DENY"; then
+  	SEG4=2
+  fi
+fi
+TOTAL=$((TOTAL + SEG4))
+echo "UFW Setup: $SEG4"
+
+
 echo "----------------------------"
 echo "TOTAL SCORE: $TOTAL / 8"
 echo "----------------------------"
-
