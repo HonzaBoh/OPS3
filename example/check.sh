@@ -40,7 +40,7 @@ echo "Task Checks: $SEG3"
 SEG5=0
 if [[ -f archives/chin.txt ]]; then
 	SEG5=1
-	if [[ -s archives/texts.tar  ]]; then
+	if [[ -s archives/texts.tar  && -f archives/texts.tar ]]; then
 		SEG5=2
 	fi
 fi
