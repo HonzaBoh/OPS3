@@ -1,4 +1,4 @@
-#!/bin/bashAdd commentMore actions
+#!/bin/bash
 
 TOTAL=0
 # Segment 1: Users/Groups
@@ -55,7 +55,7 @@ fi
 TOTAL=$((TOTAL + SEG4 + SEG10))
 echo "SSH:: $SEG4"
 echo "Log_SSH:: $SEG10"
-# 
+
 SEG5=0
 if [[ -d Downloads/archive/data ]]; then
 	echo "funugje"
@@ -66,3 +66,7 @@ if [[ -d Downloads/archive/data ]]; then
 fi
 TOTAL=$((TOTAL + SEG5))
 echo "Link & Archive:: $SEG5"
+
+echo "----------------------------"
+echo "TOTAL SCORE: $TOTAL / 8"
+echo "----------------------------"
