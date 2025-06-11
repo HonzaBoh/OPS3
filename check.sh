@@ -1,71 +1,68 @@
-#!/bin/bash
+#!/bin/bashAdd commentMore actions
 
 TOTAL=0
-
-echo "--- Kontrola ---"
-
-#Uzivatele
+# Segment 1: Users/Groups
 SEG1=0
-if id ops &>/dev/null && id kali &>/dev/null && grep -q "finals" /etc/group; then
-  if id ops | grep -qE '\bfinals\b' && id ops | grep -qE '\bsudo\b' && id kali | grep -qE '\bfinals\b'; then
-    if [ -d /home/ops ] && [ "$(stat -c %G /home/ops)" = "finals" ] && [[ $(stat -c %A /home/ops) == *w* ]]; then
-      SEG1=2
-    else
-      SEG1=1
+if id exam &>/dev/null && grep -q "ops" /etc/group && \
+   id exam | grep -qE '\bops\b' && id exam | grep -qE '\busers\b' && \
+   id kali | grep -qE '\bops\b'; then
+  SEG1=1
+fi
+TOTAL=$((TOTAL + SEG1))
+echo "User & Group Setup: $SEG1"
+
+# Segment 2: Default Shell
+SEG2=0
+if getent passwd exam | grep -q "/bin/bash"; then
+  SEG2=1
+fi
+TOTAL=$((TOTAL + SEG2))
+echo "Default Shell Check: $SEG2"
+SEG3=0
+if [ -f Movies.txt ]; then
+  if [ -f task1 ]; then
+    expected1=$(head -n 20 Movies.txt | sort)
+    actual1=$(cat task1)
+    if diff <(echo "$expected1") <(echo "$actual1") &>/dev/null; then
+      SEG3=$((SEG3+1))
+    fi
+  fi
+  if [ -f task2 ]; then
+    expected2=$(cut -d ";" -f 1 Movies.txt | nl)
+    actual2=$(cat task2)
+    if diff <(echo "$expected2") <(echo "$actual2") &>/dev/null; then
+      SEG3=$((SEG3+1))
     fi
   fi
 fi
-TOTAL=$((TOTAL + SEG1))
-echo "Users/Groups/Permissions: $SEG1 b"
-
-#Prikazy
-SEG2=0
-check1=false
-check2=false
-
-if [ -f task1 ]; then
-  expected=$(ls -l /etc 2>/dev/null | sort -k5 -n | awk '{print $9}' | grep -v '^$')
-  actual=$(awk '{print $9}' task1 | grep -v '^$')
-  if diff <(echo "$expected") <(echo "$actual") &>/dev/null; then
-    check1=true
-  fi
-fi
-
-if [ -f task2 ]; then
-  group_count=$(wc -l < /etc/group)
-  last_line=$(tail -n 1 task2 | awk '{print $1}')
-  if [ "$last_line" = "$group_count" ]; then
-    check2=true
-  fi
-fi
-
-if $check1 && $check2; then SEG2=2
-elif $check1 || $check2; then SEG2=1
-fi
-TOTAL=$((TOTAL + SEG2))
-echo "Commands: $SEG2 b"
-
-# Archivy
-SEG3=0
-if [ -d ~/archive ] && ls ~/archive/*.txt &>/dev/null; then
-  if [ -f ~/archive/final.tar ]; then
-    SEG3=2
-  else
-    SEG3=1
-  fi
-fi
 TOTAL=$((TOTAL + SEG3))
-echo "Archivy: $SEG3 b"
 
-# Segment 4: UFW Configuration
+
+echo "Command Task Checks: $SEG3"
+
+
+# Segment 4: SSH Server Check
 SEG4=0
-if ufw status | grep -q "Status: active"; then
-  SEG4=2
+SEG10=0
+if dpkg -l | grep -q openssh-server && systemctl is-active --quiet ssh; then
+  SEG4=1
+	if [[ -f logged ]]; then
+		if grep "192.168.56.1" logged &>/dev/null; then
+			SEG10=1
+		fi
+	fi
 fi
-TOTAL=$((TOTAL + SEG4))
-echo "UFW Setup: $SEG4 b"
-
-# Final total
-echo "----------------------------"
-echo "TOTAL : $TOTAL / 8"
-echo "----------------------------"
+TOTAL=$((TOTAL + SEG4 + SEG10))
+echo "SSH:: $SEG4"
+echo "Log_SSH:: $SEG10"
+# 
+SEG5=0
+if [[ -d Downloads/archive/data ]]; then
+	echo "funugje"
+	SEG5=1
+	if [[ -h ops  ]]; then
+		SEG5=2
+	fi
+fi
+TOTAL=$((TOTAL + SEG5))
+echo "Link & Archive:: $SEG5"
