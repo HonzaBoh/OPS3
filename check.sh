@@ -8,8 +8,13 @@ if id exam &>/dev/null && grep -q "ops" /etc/group && \
    id kali | grep -qE '\bops\b'; then
   SEG1=1
 fi
-TOTAL=$((TOTAL + SEG1))
+SEG2=0
+if [ -d practice ] && [ "$(stat -c %G practice)" = "exam" ]; then
+	SEG2=0
+fi
+TOTAL=$((TOTAL + SEG1 + SEG2))
 echo "User & Group Setup: $SEG1"
+echo "Permissions: $SEG2"
 
 # Segment 2: Default Shell
 SEG2=0
