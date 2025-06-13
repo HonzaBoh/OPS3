@@ -10,7 +10,7 @@ if id exam &>/dev/null && grep -q "ops" /etc/group && \
 fi
 SEG2=0
 if [ -d practice ] && [ "$(stat -c %G practice)" = "exam" ]; then
-	SEG2=0
+	SEG2=1
 fi
 TOTAL=$((TOTAL + SEG1 + SEG2))
 echo "User & Group Setup: $SEG1"
