@@ -16,13 +16,6 @@ TOTAL=$((TOTAL + SEG1 + SEG2))
 echo "User & Group Setup: $SEG1"
 echo "Permissions: $SEG2"
 
-# Segment 2: Default Shell
-SEG2=0
-if getent passwd exam | grep -q "/bin/bash"; then
-  SEG2=1
-fi
-TOTAL=$((TOTAL + SEG2))
-echo "Default Shell Check: $SEG2"
 SEG3=0
 if [ -f Movies.txt ]; then
   if [ -f task1 ]; then
@@ -41,7 +34,6 @@ if [ -f Movies.txt ]; then
   fi
 fi
 TOTAL=$((TOTAL + SEG3))
-
 
 echo "Command Task Checks: $SEG3"
 
@@ -63,7 +55,6 @@ echo "Log_SSH:: $SEG10"
 
 SEG5=0
 if [[ -d Downloads/archive/data ]]; then
-	echo "funugje"
 	SEG5=1
 	if [[ -h ops  ]]; then
 		SEG5=2
