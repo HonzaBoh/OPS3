@@ -47,18 +47,14 @@ TOTAL=$((TOTAL + SEG5))
 echo "Link & Archive:: $SEG5"
 
 SEG4=0
-SEG10=0
-if dpkg -l | grep -q openssh-server && systemctl is-active --quiet ssh; then
+if ufw status | grep -q "Status: active"; then
   SEG4=1
-	if [[ -f logged ]]; then
-		if grep "192.168.56.1" logged &>/dev/null; then
-			SEG10=1
-		fi
-	fi
+  if ufw status | grep -q "ALLOW" && ufw status | grep -q "DENY"; then
+  	SEG4=2
+  fi
 fi
-TOTAL=$((TOTAL + SEG4 + SEG10))
-echo "SSH:: $SEG4"
-echo "Log_SSH:: $SEG10"
+TOTAL=$((TOTAL + SEG4))
+echo "UFW Setup: $SEG4"
 
 echo "----------------------------"
 echo "TOTAL SCORE: $TOTAL / 8"
